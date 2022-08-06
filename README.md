@@ -1,0 +1,1 @@
+A Project to get comfortable with MySQL. The program will deal with accounts, allowing users to login, register or delete accounts. There will be different types of accounts (Student, Teacher or Admin)
