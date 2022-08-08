@@ -11,5 +11,6 @@ The School Management System is a way for me to get used to working with both Py
 
 * Admin login and commands ✔️
 * Student login
-* Professor login
+* Professor login ✔️
+* Attendance System (Professors will be able to mark students late/absent/present and view the attendance status) ✔️
 * Adding courses to an account

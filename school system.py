@@ -9,11 +9,63 @@ db = mysql.connector.connect(
 
 myCursor = db.cursor(buffered=True)
 
+"""
+Professor login session
+Professors will be able to mark and check students' attendance status
+"""
+def prof_session():
+    print("Professor Login Successful")
+    while True:
+        #Professor Menu
+        print("\n1. Mark Student Register")
+        print("2. View Register")
+        print("3. Logout")
+
+        user_option = input(str("Option: "))
+        if(user_option == "1"):
+            print("\nMark Student Register")
+            #Query the database for the username of all students
+            myCursor.execute("SELECT username FROM users WHERE accType = 'student'")
+            #Fetch all the records that are returned from the query above
+            records = myCursor.fetchall()
+            #Prompt user for the date
+            date = input(str("Date : DD/MM/YYYY: "))
+
+            #Since each record is returned as a tuple, we want to remove the extra characters
+            for record in records:
+                record = str(record).replace("'", "")
+                record = str(record).replace(",","")
+                record = str(record).replace("(", "")
+                record = str(record).replace(")","")
+
+                #The three possible status: absent, present or late
+                status = input(str("Status for " + str(record) + " (A/P/L): "))
+                query_values = (str(record), date, status)
+                myCursor.execute("INSERT INTO attendance (username, date, status) VALUES (%s, %s, %s)", query_values)
+                db.commit()
+                print(record + " Marked as " + status)
+
+        elif(user_option == "2"):
+            print("\nViewing Attendance")
+            #query the database for the username, date and status for each entry
+            myCursor.execute("SELECT username, date, status FROM attendance")
+            #fetch all the records that are returned from the query above
+            records = myCursor.fetchall()
+            #printing the records
+            for record in records:
+                print(record)
+
+        elif(user_option == "3"):
+            print("Logging out\n")
+            break
+        else:
+            print("Invalid Option")
+
 def admin_session():
-    print("Admin Login successful\n")
+    print("Admin Login Successful")
     while True:
         #Admin Menu
-        print("1. Register New Student")
+        print("\n1. Register New Student")
         print("2. Register New Professor")
         print("3. Delete Existing Student")
         print("4. Delete Existing Professor")
@@ -90,7 +142,23 @@ def admin_login():
     else:
         print("User not recognized")
 
+def prof_login():
+    #Prompt user for login details
+    print("Professor Login\n")
+    username = input(str("Username: "))
+    password = input(str("Password: "))
 
+    #Check login details
+    query_values = (username, password)
+    myCursor.execute("SELECT * FROM users WHERE username = %s AND password = %s AND accType = 'professor'", query_values)
+    if myCursor.rowcount < 1:
+        print("Incorrect login details")
+    else:
+        prof_session()
+
+
+def student_login():
+    print("Student login\n")
 
 def main():
     
@@ -106,9 +174,9 @@ def main():
         if user_option == "1":
             admin_login()
         elif user_option == "2":
-            print("Student Login")
+            student_login()
         elif user_option == "3":
-            print("Professor Login")
+            prof_login()
         else:
             print("Invalid Option")
 
