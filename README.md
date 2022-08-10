@@ -7,10 +7,10 @@ The School Management System is a way for me to get used to working with both Py
 
 ---
 
-## Features bucketlist
+## Features
 
 * Admin login and commands (Admins can register/delete teacher and student accounts)✔️
 * Student login ✔️
 * Professor login ✔️
-* Attendance System (Professors will be able to mark students late/absent/present and students will be able to download them into text files) ✔️
-* Adding courses to an account (Students will be able to enroll/unenroll in courses)
+* Attendance System (Professors will be able to mark students L/A/P (late/absent/present) and students will be able to download them into text files) ✔️
+* Adding courses to an account (Students will be able to enroll/unenroll in courses) ✔️
