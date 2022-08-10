@@ -11,27 +11,31 @@ myCursor = db.cursor(buffered=True)
 
 """
 Student login session
-This function takes in one string parameter representing the users username
-Students will be able to check their attendance status and download it as a text file
+This function takes in one string parameter representing the students username
+Students will be able to check their attendance record and download it onto a text file -> The status for the records is A/P/L (Absent/Present/Late)
+Students will also be able to enroll/unenroll/view their courses
 """
 def student_session(username):
     print("\nStudent Login Successful")
 
-    username = (str(username),)
-    #query the database and store into records
-    myCursor.execute("SELECT date, username, status FROM attendance WHERE username = %s", username)
+    usernameTuple = (str(username),)
+    #query the database for the students' attendance record and store it into records
+    myCursor.execute("SELECT date, username, status FROM attendance WHERE username = %s", usernameTuple)
     records = myCursor.fetchall()
 
     while True:
         #Student Menu
-        print("\n1. View Attendance Status")
-        print("2. Download Attendance Status")
-        print("3. Logout")
+        print("\n1. View Attendance Record")
+        print("2. Download Attendance Record")
+        print("3. Enroll in Course")
+        print("4. Unenroll Course")
+        print("5. View Courses")
+        print("6. Logout")
 
         user_option = input(str("Option: "))
 
         if user_option == "1":
-            print("Viewing Attendance Status")
+            print("Viewing Attendance Record")
             #Print each record in records
             for record in records:
                 print(record)
@@ -44,8 +48,41 @@ def student_session(username):
                     f.write(str(records)+"\n")
                 f.close()
             print("All records downloaded")
-
+        
         elif user_option == "3":
+            #Prompty user for the date and the course they want to enroll in
+            print("Enrolling in Course")
+            course = input(str("Course Name: "))
+            date = input(str("Date : DD/MM/YYYY: "))
+            #Add the course to the courses table in the database
+            query_values = (username, date, course)
+            myCursor.execute("INSERT INTO courses (username, date, course) VALUES (%s, %s, %s)", query_values)
+            db.commit()
+            print("Successfully Enrolled")
+
+        elif user_option == "4":
+            print("Unenrolling Course")
+            course = input(str("Course Name: "))
+            query_values = (username, course)
+            #Delete any course listed under the users username and the course they entered
+            myCursor.execute("DELETE FROM courses WHERE username = %s AND course = %s", query_values)
+            db.commit()
+            #If no changes happened, then the course was not found
+            if myCursor.rowcount < 1:
+                print("Course not found")
+            else:
+                print("Successfully Unenrolled")
+
+        elif user_option == "5":
+            print("Viewing Courses")
+            myCursor.execute("SELECT username, date, course FROM courses WHERE username = %s", usernameTuple)
+            courseRecords = myCursor.fetchall()
+
+            for record in courseRecords:
+                print(record)
+
+
+        elif user_option == "6":
             print("Logging out")
             break
         else:
