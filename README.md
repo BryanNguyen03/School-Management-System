@@ -3,7 +3,7 @@
 
 ## School Management System
 
-The School Management System is a project that uses Python and MySQL. The program was written to help me learn how to manipulate databases using Python and learn the basics of SQL. Users will be able to login as professors, students or an admin. Each of the account types will have its own unique features (See below).
+The School Management System is a program that uses Python and MySQL. The program was written to help me learn how to manipulate databases using Python and learn the basics of SQL. Users will be able to login as professors, students or an admin. Each of the account types will have its own unique features (See below).
 
 ---
 
